@@ -238,7 +238,7 @@ Wave make_wave(Data const& data) {
   int const bits {16};
   bool const sign {true};
   double const max_amplitude {(std::pow(2, (sign ? bits - 1 : bits))) - 1};
-  std::size_t const size {static_cast<std::size_t>((data.time < 1 ? 1 : data.time) * wave.sample_rate)};
+  std::size_t const size {static_cast<std::size_t>(data.time * wave.sample_rate)};
   wave.num_samples += static_cast<int>(size) * wave.num_channels;
   wave.samples.reserve(static_cast<std::size_t>(wave.num_samples));
 

@@ -70,7 +70,7 @@ brew install gcc
 brew link gcc
 ```
 
-SMFL audio is also required and not available as a brew cask. Manually install it [from this download](https://www.sfml-dev.org/files/SFML-2.5.1-macOS-clang.tar.gz): extract the contents and copy the lib/\* -> /usr/local/lib and include/\* -> /usr/local/include. Ensure the include/lib paths are added to the OB_INCLUDE_DIRECTORIES and lib path to OB_LINKER_FLAGS_RELEASE via the -L flag.
+SMFL audio is also required and can be installed via `brew install sfml` or manually install it [from this download](https://www.sfml-dev.org/files/SFML-2.5.1-macOS-clang.tar.gz): extract the contents and copy the lib/\* -> /usr/local/lib and include/\* -> /usr/local/include. Get ready for lots of SIP warnings trying to run the build for the first time!
 
 The following CMake argument will then need to be appended to the end of the line when running the shell script.
 Remember to replace the placeholder `<path-to-g++>` with the canonical path to the new __g++__ compiler binary.
