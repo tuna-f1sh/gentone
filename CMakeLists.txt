@@ -59,6 +59,7 @@ set (OB_LINK_LIBRARIES
 )
 set (OB_INCLUDE_DIRECTORIES
   ./src
+  /usr/local/include
 )
 # set (CXX_COMPILER "clang++")
 
@@ -83,7 +84,7 @@ if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
   set (DEBUG_LINK_FLAGS "-fprofile-arcs -ftest-coverage")
 
   set (OB_FLAGS_RELEASE "-O3 -flto")
-  set (OB_LINKER_FLAGS_RELEASE "-O3 -flto -s")
+  set (OB_LINKER_FLAGS_RELEASE "-O3 -flto -s -L/usr/local/lib")
 elseif ("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
   if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
     if (CMAKE_CXX_COMPILER_VERSION VERSION_LESS "${OB_COMPILER_VERSION_CLANG}")
