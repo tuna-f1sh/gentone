@@ -61,10 +61,10 @@ inline void program_init(OB::Parg& pg);
 
 inline void program_init(OB::Parg& pg)
 {
-  pg.name("gentone").version("0.1.2 (24.03.2020)");
+  pg.name("gentone").version("0.1.3 (30.10.2021)");
   pg.description("Generate a tone from a note or frequency.");
 
-  pg.usage("[Hz|A-G[b#]0-8] [--colour=<on|off|auto>] [-l|--loop] [--char=<char>] [--a4=<Hz>] [--speed=<m/s>] [-w|--wave=<sine|square|triangle|saw>] [-t|--time=<seconds>] [-c|--channels=<1|2|mono|stereo|left|right>] [-r|--rate=<Hz>] [-a|--amplitude=<0.0-1.0>] [-o|--output=<file>]");
+  pg.usage("[Hz|A-G[b#]0-8] [--colour=<on|off|auto>] [-l|--loop] [--char=<char>] [--a4=<Hz>] [--speed=<m/s>] [-w|--wave=<sine|square|triangle|saw>] [-t|--time=<seconds>] [-c|--channels=<1|2|mono|stereo|left|right>] [-r|--rate=<Hz>] [-a|--amplitude=<0.0-1.0>] [-o|--output=<file>] [--noprint]");
   pg.usage("[--colour=<on|off|auto>] -h|--help");
   pg.usage("[--colour=<on|off|auto>] -v|--version");
   pg.usage("[--colour=<on|off|auto>] --license");
@@ -115,6 +115,7 @@ inline void program_init(OB::Parg& pg)
   // options
   pg.set("colour", "auto", "on|off|auto", "Print the program output with colour either on, off, or auto based on if stdout is a tty, the default value is 'auto'.");
 
+  pg.set("noprint", "Disable waveform printing");
   pg.set("loop,l", "Loop the generated tone.");
   pg.set("char", "*", "char", "The character used to draw the wave diagram.");
   pg.set("a4", "440", "Hz", "The standard pitch frequency used for the A above middle C.");

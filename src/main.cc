@@ -120,6 +120,7 @@ struct Data {
   int chan {0};
   double time {0};
   bool loop {false};
+  bool noprint {false};
 };
 
 template <typename T = std::chrono::milliseconds>
@@ -150,7 +151,7 @@ Wave make_wave(Data const& data);
 Track make_track(Wave const& wave, bool const loop);
 bool is_playing(Track const& track);
 void draw_wave(Wave const& wave, Data const& data, Track const* track = nullptr);
-/* void save_to_file(Wave const& wave, std::string const& output); */
+void save_to_file(Wave const& wave, std::string const& output);
 Data make_data(Parg& pg);
 void print_data(Data const& data);
 
@@ -364,15 +365,16 @@ void draw_wave(Wave const& wave, Data const& data, Track const* track) {
   }
 }
 
-/* void save_to_file(Wave const& wave, std::string const& output) { */
-/*   sf::SoundBuffer buf; */
-/*   if (!buf.loadFromSamples(wave.samples.data(), static_cast<sf::Uint64>(wave.num_samples), static_cast<unsigned int>(wave.num_channels), static_cast<unsigned int>(wave.sample_rate))) { */
-/*     throw std::runtime_error("failed to load audio from sample"); */
-/*   } */
-/*   if (!buf.saveToFile(output)) { */
-/*     throw std::runtime_error("failed to save audio to '" + output + "'"); */
-/*   } */
-/* } */
+void save_to_file(Wave const& wave, std::string const& output) {
+  sf::SoundBuffer buf;
+  if (!buf.loadFromSamples(wave.samples.data(), static_cast<sf::Uint64>(wave.num_samples), static_cast<unsigned int>(wave.num_channels), static_cast<unsigned int>(wave.sample_rate))) {
+    throw std::runtime_error("failed to load audio from sample");
+  }
+  throw std::runtime_error("This macOS build does not support save audio");
+  /* if (!buf.saveToFile(output)) { */
+  /*   throw std::runtime_error("failed to save audio to '" + output + "'"); */
+  /* } */
+}
 
 Data make_data(Parg& pg) {
   // TODO validate all user passed args
@@ -412,6 +414,7 @@ Data make_data(Parg& pg) {
 
   data.time = pg.get<double>("time");
   data.loop = pg.get<bool>("loop");
+  data.noprint = pg.get<bool>("noprint");
   if (data.loop && data.time == 0) {data.time = 1;}
 
   data.wave = pg.get<std::string>("wave");
@@ -469,21 +472,21 @@ int main(int argc, char** argv) {
     std::signal(SIGTERM, signal_handler);
 
     auto data = make_data(pg);
-    print_data(data);
+    if (!data.noprint) print_data(data);
 
     auto wave = make_wave(data);
-    /* if (pg.find("output")) { */
-    /*   save_to_file(wave, pg.get<std::string>("output")); */
-    /* } */
-    /* else if (data.time > 0.0) { */
-    if (data.time > 0.0) {
+    if (pg.find("output")) {
+      save_to_file(wave, pg.get<std::string>("output"));
+    }
+    else if (data.time > 0.0) {
+    /* if (data.time > 0.0) { */
       auto track = make_track(wave, data.loop);
       track.sound.play();
-      if (is_term) {draw_wave(wave, data, &track);}
+      if (is_term && !data.noprint) {draw_wave(wave, data, &track);}
       while (is_playing(track)) {sleep(std::chrono::milliseconds(20));}
     }
     else {
-      if (is_term) {draw_wave(wave, data);}
+      if (is_term && !data.noprint) {draw_wave(wave, data);}
     }
   }
   catch(std::exception const& e) {
